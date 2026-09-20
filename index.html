@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Z-MEDIA — Photo et vidéo d'événements</title>
+<meta name="description" content="Z-MEDIA couvre vos événements en photo et en vidéo : mariages, concerts, soirées, conférences.">
+<link rel="icon" href="logo.PNG">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="wrap masthead">
+  <a class="brand" href="index.html">
+    <img src="logo.PNG" alt="" onerror="this.remove()">
+    <span>Z-MEDIA</span>
+  </a>
+  <a class="contact" href="mailto:zmedia861@gmail.com">zmedia861@gmail.com</a>
+</header>
+
+<div class="wrap"><hr class="rule"></div>
+
+<main>
+  <section class="wrap hero">
+    <h1>Vos événements, gardés en image.</h1>
+    <p class="lede">Photo et vidéo d'événements à Lomé et partout au Togo. On arrive tôt, on repart tard, et vous récupérez des images prêtes à être partagées.</p>
+    <div class="hero-actions">
+      <a class="btn" href="collaboration.html">Demander une couverture</a>
+      <a class="btn btn--ghost" href="evenements.html">Voir les événements</a>
+    </div>
+  </section>
+
+  <section class="wrap section--tight">
+    <div class="strip" id="strip"></div>
+  </section>
+
+  <section class="wrap section">
+    <h2>Ce qu'on couvre</h2>
+    <div class="services">
+      <div>
+        <h3>Mariages</h3>
+        <p>De la préparation à la dernière danse, en photo et en vidéo.</p>
+      </div>
+      <div>
+        <h3>Concerts et soirées</h3>
+        <p>Captation en basse lumière, images livrées rapidement pour vos réseaux.</p>
+      </div>
+      <div>
+        <h3>Conférences et entreprises</h3>
+        <p>Couverture discrète, portraits d'intervenants, film récapitulatif.</p>
+      </div>
+      <div>
+        <h3>Contenu de marque</h3>
+        <p>Séries photo et formats courts pensés pour Instagram et TikTok.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap section">
+    <h2>Travaillons ensemble</h2>
+    <p class="lede">Dites-nous la date, le lieu et le type d'événement. Réponse sous 48 h.</p>
+    <div class="hero-actions">
+      <a class="btn" href="collaboration.html">Remplir le formulaire</a>
+    </div>
+  </section>
+
+  <footer class="wrap foot">
+    <span>Z-MEDIA — Lomé, Togo</span>
+    <a href="mailto:zmedia861@gmail.com">zmedia861@gmail.com</a>
+  </footer>
+</main>
+
+<nav class="tabbar" aria-label="Navigation principale">
+  <a href="index.html" aria-current="page">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+    Accueil
+  </a>
+  <a href="evenements.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="8.5" cy="10" r="1.6"/><path d="m4 17 5-4.5 4.5 4"/><path d="m13 14 2.5-2 4.5 4"/></svg>
+    Événements
+  </a>
+  <a href="collaboration.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>
+    Collaboration
+  </a>
+</nav>
+
+<script src="images.js"></script>
+<script>
+  (function () {
+    var strip = document.getElementById('strip');
+    if (!strip || typeof IMAGES === 'undefined') return;
+    IMAGES.slice(0, 3).forEach(function (item) {
+      var a = document.createElement('a');
+      a.href = 'evenements.html';
+      var fig = document.createElement('figure');
+      var img = document.createElement('img');
+      img.src = (typeof BASE_URL !== 'undefined' ? BASE_URL : '') + item.src;
+      img.alt = item.titre;
+      img.loading = 'lazy';
+      img.onerror = function () { a.remove(); };
+      fig.appendChild(img);
+      a.appendChild(fig);
+      strip.appendChild(a);
+    });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Événements — Z-MEDIA</title>
+<meta name="description" content="Les événements couverts par Z-MEDIA : mariages, concerts, soirées et conférences.">
+<link rel="icon" href="logo.PNG">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="wrap masthead">
+  <a class="brand" href="index.html">
+    <img src="logo.PNG" alt="" onerror="this.remove()">
+    <span>Z-MEDIA</span>
+  </a>
+  <a class="contact" href="mailto:zmedia861@gmail.com">zmedia861@gmail.com</a>
+</header>
+
+<div class="wrap"><hr class="rule"></div>
+
+<main class="wrap section--tight">
+  <h1 style="font-size:clamp(2rem,5vw,3rem)">Événements</h1>
+  <p class="lede">Une sélection de ce qu'on a filmé et photographié. Touchez une image pour l'agrandir.</p>
+
+  <div class="filters" id="filters" role="group" aria-label="Filtrer par type d'événement"></div>
+
+  <div class="gallery" id="gallery"></div>
+  <p class="empty" id="empty" hidden>Aucune image pour le moment. Ajoutez vos photos dans le dossier du site puis listez-les dans <code>images.js</code>.</p>
+
+  <footer class="foot">
+    <span>Z-MEDIA — Lomé, Togo</span>
+    <a href="collaboration.html">Travailler avec nous</a>
+  </footer>
+</main>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image agrandie">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Fermer">&times;</button>
+  <figure>
+    <img id="lightbox-img" src="" alt="">
+    <figcaption id="lightbox-cap"></figcaption>
+  </figure>
+</div>
+
+<nav class="tabbar" aria-label="Navigation principale">
+  <a href="index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+    Accueil
+  </a>
+  <a href="evenements.html" aria-current="page">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="8.5" cy="10" r="1.6"/><path d="m4 17 5-4.5 4.5 4"/><path d="m13 14 2.5-2 4.5 4"/></svg>
+    Événements
+  </a>
+  <a href="collaboration.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>
+    Collaboration
+  </a>
+</nav>
+
+<script src="images.js"></script>
+<script>
+(function () {
+  var base = (typeof BASE_URL !== 'undefined' ? BASE_URL : '');
+  var data = (typeof IMAGES !== 'undefined' ? IMAGES : []);
+  var gallery = document.getElementById('gallery');
+  var filters = document.getElementById('filters');
+  var empty = document.getElementById('empty');
+  var box = document.getElementById('lightbox');
+  var boxImg = document.getElementById('lightbox-img');
+  var boxCap = document.getElementById('lightbox-cap');
+  var loaded = 0;
+
+  if (!data.length) { empty.hidden = false; return; }
+
+  var cats = ['Tout'];
+  data.forEach(function (i) {
+    if (i.categorie && cats.indexOf(i.categorie) === -1) cats.push(i.categorie);
+  });
+
+  cats.forEach(function (cat, index) {
+    var b = document.createElement('button');
+    b.className = 'chip';
+    b.type = 'button';
+    b.textContent = cat;
+    b.setAttribute('aria-pressed', index === 0 ? 'true' : 'false');
+    b.addEventListener('click', function () {
+      filters.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      render(cat);
+    });
+    filters.appendChild(b);
+  });
+
+  function render(cat) {
+    gallery.innerHTML = '';
+    data
+      .filter(function (i) { return cat === 'Tout' || i.categorie === cat; })
+      .forEach(function (item) {
+        var fig = document.createElement('figure');
+        var img = document.createElement('img');
+        img.src = base + item.src;
+        img.alt = item.titre || 'Événement couvert par Z-MEDIA';
+        img.loading = 'lazy';
+        img.onload = function () { loaded++; };
+        img.onerror = function () {
+          fig.remove();
+          if (!gallery.children.length && !loaded) empty.hidden = false;
+        };
+
+        var cap = document.createElement('figcaption');
+        var left = document.createElement('span');
+        left.textContent = item.titre || '';
+        var right = document.createElement('span');
+        right.textContent = [item.lieu, item.annee].filter(Boolean).join(' · ');
+        cap.append(left, right);
+
+        fig.append(img, cap);
+        fig.setAttribute('tabindex', '0');
+        fig.setAttribute('role', 'button');
+        fig.addEventListener('click', function () { open(item, img.src); });
+        fig.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(item, img.src); }
+        });
+        gallery.appendChild(fig);
+      });
+  }
+
+  function open(item, src) {
+    boxImg.src = src;
+    boxImg.alt = item.titre || '';
+    boxCap.textContent = [item.titre, item.lieu, item.annee].filter(Boolean).join(' — ');
+    box.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('lightbox-close').focus();
+  }
+
+  function close() {
+    box.classList.remove('is-open');
+    boxImg.src = '';
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('lightbox-close').addEventListener('click', close);
+  box.addEventListener('click', function (e) { if (e.target === box) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+
+  render('Tout');
+})();
+</script>
+</body>
+</html>

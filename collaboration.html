@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Collaboration — Z-MEDIA</title>
+<meta name="description" content="Confiez votre événement à Z-MEDIA : remplissez le formulaire, réponse sous 48 h.">
+<link rel="icon" href="logo.PNG">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="wrap masthead">
+  <a class="brand" href="index.html">
+    <img src="logo.PNG" alt="" onerror="this.remove()">
+    <span>Z-MEDIA</span>
+  </a>
+  <a class="contact" href="mailto:zmedia861@gmail.com">zmedia861@gmail.com</a>
+</header>
+
+<div class="wrap"><hr class="rule"></div>
+
+<main class="wrap section--tight">
+  <div class="form-layout">
+    <div>
+      <h1 style="font-size:clamp(2rem,5vw,3rem)">Collaboration</h1>
+      <p class="lede">Un événement à couvrir, un projet de marque, une collaboration créative : écrivez-nous. On répond sous 48 h.</p>
+      <ul class="info-list">
+        <li><span>E-mail</span><a href="mailto:zmedia861@gmail.com">zmedia861@gmail.com</a></li>
+        <li><span>Zone</span>Lomé et tout le Togo</li>
+        <li><span>Délai de réponse</span>48 h</li>
+      </ul>
+    </div>
+
+    <form id="form" action="https://formspree.io/f/xjykyyqr" method="POST">
+      <div class="field-row">
+        <div class="field">
+          <label for="nom">Nom complet</label>
+          <input id="nom" name="Nom" type="text" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input id="email" name="Email" type="email" required autocomplete="email">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="tel">Téléphone (facultatif)</label>
+          <input id="tel" name="Telephone" type="tel" autocomplete="tel">
+        </div>
+        <div class="field">
+          <label for="type">Type de projet</label>
+          <select id="type" name="Type de projet" required>
+            <option value="">Choisir…</option>
+            <option>Mariage</option>
+            <option>Concert ou soirée</option>
+            <option>Conférence ou entreprise</option>
+            <option>Contenu de marque</option>
+            <option>Autre</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="date">Date de l'événement</label>
+          <input id="date" name="Date de l'evenement" type="date">
+        </div>
+        <div class="field">
+          <label for="lieu">Lieu</label>
+          <input id="lieu" name="Lieu" type="text" placeholder="Lomé, Agoè…">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="message">Votre message</label>
+        <textarea id="message" name="Message" required placeholder="Décrivez l'événement, la durée, ce que vous attendez des images."></textarea>
+      </div>
+
+      <input type="text" name="_honey" class="honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <input type="hidden" name="_subject" value="Nouvelle demande de collaboration — site Z-MEDIA">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_captcha" value="false">
+
+      <button class="btn" type="submit" id="submit">Envoyer la demande</button>
+      <p class="form-note">Vos informations servent uniquement à répondre à votre demande.</p>
+      <p class="form-status" id="status" role="status"></p>
+    </form>
+  </div>
+
+  <footer class="foot">
+    <span>Z-MEDIA — Lomé, Togo</span>
+    <a href="evenements.html">Voir les événements</a>
+  </footer>
+</main>
+
+<nav class="tabbar" aria-label="Navigation principale">
+  <a href="index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+    Accueil
+  </a>
+  <a href="evenements.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="8.5" cy="10" r="1.6"/><path d="m4 17 5-4.5 4.5 4"/><path d="m13 14 2.5-2 4.5 4"/></svg>
+    Événements
+  </a>
+  <a href="collaboration.html" aria-current="page">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>
+    Collaboration
+  </a>
+</nav>
+
+<script>
+(function () {
+  var form = document.getElementById('form');
+  var status = document.getElementById('status');
+  var button = document.getElementById('submit');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    button.disabled = true;
+    button.textContent = 'Envoi en cours…';
+    status.className = 'form-status';
+
+    fetch(form.action, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(Object.fromEntries(new FormData(form)))
+    })
+      .then(function (r) {
+        if (!r.ok) throw new Error('reponse ' + r.status);
+        return r.json();
+      })
+      .then(function () {
+        form.reset();
+        status.textContent = 'Message envoyé. Réponse sous 48 h.';
+        status.className = 'form-status is-visible is-ok';
+      })
+      .catch(function () {
+        status.innerHTML = "L'envoi a échoué. Réessayez, ou écrivez à <a href=\"mailto:zmedia861@gmail.com\">zmedia861@gmail.com</a>.";
+        status.className = 'form-status is-visible is-error';
+      })
+      .finally(function () {
+        button.disabled = false;
+        button.textContent = 'Envoyer la demande';
+      });
+  });
+})();
+</script>
+</body>
+</html>
